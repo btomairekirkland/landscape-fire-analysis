@@ -1,9 +1,3 @@
-// EXTRACTING LAND COVER TYPES ACROSS FIRE AND NON-FIRE GRID CELLS
-// M. Kirkland
-// Created 23/06/22
-// Updated 11/08/22
-// =======================================================
-
 // Land cover map ('lc') for Polesia is available at
 // https://github.com/tpfd/Polesia-Landcover
 
