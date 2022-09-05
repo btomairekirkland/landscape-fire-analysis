@@ -4,7 +4,7 @@
 // Updated 11/08/22
 // =======================================================
 
-// Land cover map ('lc') for Polesia is the available at
+// Land cover map ('lc') for Polesia is available at
 // https://github.com/tpfd/Polesia-Landcover
 
 // First for some data cleaning
@@ -57,7 +57,7 @@ print(lc, 'Land cover data');
 print(simp, 'Simple land cover data');
 
 // Extract histogram of land covers within fire/non-fire grid cells
-// Loop throught each pixel as compuationally intensive
+// Loop throught each grid cell as compuationally intensive
 var lcFires = pixels.map(function (feature) {
   return ee.Feature(feature.geometry(), simp.reduceRegion({
   reducer: ee.Reducer.frequencyHistogram(),
@@ -68,7 +68,7 @@ var lcFires = pixels.map(function (feature) {
   .set('pix', feature.get('pix')) // Add grid cell IDs to each feature 
   // Fires are made up of multiple grid cells
 }); 
-// Samples all land cover pixels that have their centers within the collection pixels
+// Samples all land cover pixels that have their centers within the collection grid cells
 
 // Export as CSV
 Export.table.toDrive({
