@@ -1,10 +1,3 @@
-##################################################################
-# EXTRACTING INPUT VARIABLES WITHIN GRID CELLS
-# M. Kirkland 
-# Created 20/07/22
-# Updated 23/08/22
-##################################################################
-
 # Clear data
 rm(list = ls())
 
@@ -21,7 +14,8 @@ ee_Initialize() ##  Initialize GEE language
 pixels <- ee$FeatureCollection(paste0(ee_get_assethome(), '/all_pixels'))
 
 # View property names 
-pixels$first()$propertyNames()$getInfo()
+pixels$first()$propertyNames()$getInfo() ## Each grid cell has a 'z' and a 'pix' ID value 
+## All 'pix' values are unique, but grid cells within a fire patch have same 'z' value
 # Vector of dates 
 dts <- unique(pixels$aggregate_array('dates')$getInfo())
 
