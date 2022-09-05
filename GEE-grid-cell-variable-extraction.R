@@ -51,7 +51,7 @@ for (i in 1:length(new.dts)) {
   ndvi.lst[[i]] <- 
     pixels$filter(ee$Filter$eq('dates', dts[i]))$map(function (feature) { 
       # Map over each pixel with given date as computationally intensive
-      ee$Feature(feature$geometry(), ndvi$filter(ee$Filter$date(new.dts[i]))$toBands()$rename('NDVI')$
+      ee$Feature(feature$geometry(), ndvi$filter(ee$Filter$date(new.dts[i]))$toBands()$rename('ndvi')$
                    reduceRegion(
         # Filter NDVI images for 16 to 8 days before fire starts to get closest NDVI image that spans period
         # before fire
@@ -67,7 +67,7 @@ for (i in 1:length(new.dts)) {
 # Merge features and export
 ndvi.df <- ee$FeatureCollection(ndvi.lst)$flatten()
 ndvi.exp <- ee$batch$Export$table(ndvi.df, 'NDVI-250', list(driveFolder = 'pixels', # Save to Google drive
-                                                        selectors = c('z', 'pix', 'NDVI'))) # Select columns to export
+                                                        selectors = c('z', 'pix', 'ndvi'))) # Select columns to export
 ndvi.exp$start()
 ee_monitoring()
 
