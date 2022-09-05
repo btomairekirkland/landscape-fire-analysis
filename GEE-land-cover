@@ -58,9 +58,9 @@ var lcFires = pixels.map(function (feature) {
   geometry: feature.geometry(),
 
   }))
-  .set('z', feature.get('z')) // Add fire/non-fire IDs to each feature 
-  .set('pix', feature.get('pix')) // Add grid cell IDs to each feature 
-  // Fires are made up of multiple grid cells
+  .set('z', feature.get('z')) // Add 'z' IDs to each feature 
+  .set('pix', feature.get('pix')) // Add grid cell 'pix' IDs to each feature 
+  // Fires are made up of multiple grid cells which have the same 'z' ID but all 'pix' values are unique
 }); 
 // Samples all land cover pixels that have their centers within the collection grid cells
 
