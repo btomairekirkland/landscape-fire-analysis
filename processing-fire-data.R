@@ -1,3 +1,5 @@
+# Processing FRY data obtained from https://www.nature.com/articles/sdata2018132 and creating non-fire control points
+
 rm(list = ls())
 
 # Load libraries 
@@ -6,7 +8,6 @@ library(raster)
 library(lubridate)
 library(ggplot2)
 library(dplyr)
-
 
 # First read in data, including fire data spreadsheets and shapefiles and land cover data
 
@@ -48,7 +49,7 @@ fires.sp <- inner_join(sf.ob, fires)
 
 # Remove duplicate columns (e.g., centre lat/lon coordinates, dates) and rename any columns as needed 
 ## st_write abbreviates to 7 letters and need unique names
-col.ind <- which( colnames(fires.sp) %in% c("ï..ptch_id","CENTRE.x","CENTRE.y","Sigma_Yx","Sigma_Yy","Sigma_Xx","Sigma_Xy","Sigma_Y_m","Sigma_X_m") )
+col.ind <- which( colnames(fires.sp) %in% c("Ã¯..ptch_id","CENTRE.x","CENTRE.y","Sigma_Yx","Sigma_Yy","Sigma_Xx","Sigma_Xy","Sigma_Y_m","Sigma_X_m") )
 colnames(fires.sp)[col.ind] <- 
   c("ptch_id", "x","y","sigyx", "sigyy","sigxx","sigxy","sigym","sigxm")
 
