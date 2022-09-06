@@ -322,7 +322,7 @@ winter <- pixels$filter(ee$Filter$inList('month', ee$List(c(1,2,12))))
 # Merge into feature collection
 pixels <- ee$FeatureCollection(ee$List(c(winter,non.winter)))$flatten()
 
-for (i in 1) {
+for (i in 1:length(snow.date)) {
   snow.mean[[i]] <- pixels$filter(ee$Filter$eq('snow_dt', snow.date[i]))$map(function (feature) { 
   ee$Feature(feature$geometry(), snow$filter(ee$Filter$date(str.date[i], snow.date[i]))$mean()
              # Merge images to calculate mean snow cover over the winter period 
@@ -393,7 +393,8 @@ fric.df <- pixels$map(function (feature) {
   ee$Feature(feature$geometry(), fric$
                reduceRegion(
                  reducer = ee$Reducer$mean(),
-                 geometry = feature$geometry()
+                 geometry = feature$geometry(),
+                 scale = 250
                ))$set('z', feature$get('z'))$
                   set('pix', feature$get('pix'))
 })
