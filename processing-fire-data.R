@@ -67,8 +67,9 @@ grid <- st_make_grid(large.fires, cellsize = 0.0022457331) ## 250m2
 grid.sf <- st_as_sf(grid)
 # Change geometry column name
 st_geometry(grid.sf) <- grid.sf$x; st_geometry(grid.sf) <- "geometry"
-# Merge grid with fire patch data
-grid.fires <- st_join(x = grid.sf, y = large.fires, left = F)
+grid.fires <- grid.sf[st_join(x = st_centroid(grid.sf), y = fires, left = F),] # Select grid cells whose centre point overlaps 
+                                                                               # with a fire
+grid.fires <- st_join(x = grid.fires, y = fires, left = F) # Merge with fire dataset
 
 # Create control points (non-fire observations)
 # Extract land cover type at centre point of control points
@@ -120,17 +121,17 @@ for (i in 1:length(dates)) {
 int.df <- do.call("rbind", int)
 
 # Remove grid cells that overlap in time and space with fires to select control points
-cnt.pts <- grid.eq[!(grid.eq$x %in% int.df$x),]
-plot(cnt.pts[1,], max.plot = 1) # Visually inspect control points
+ctrl.pts <- grid.eq[!(grid.eq$x %in% int.df$x),]
+plot(ctrl.pts[1,], max.plot = 1) # Visually inspect control points
 
 # Explore distribution of control points by land cover type and resample to select 1.5x as many fire observations 
-table(cnt.pts$lc)
-cnt.pts <- cnt.pts %>%
+table(ctrl.pts$lc)
+ctrl.pts <- ctrl.pts %>%
   group_by(lc) %>%
   sample_n(173415, replace = F)
 
 # Check temporal distribution
-temp.trend <- cnt.pts %>% 
+temp.trend <- ctrl.pts %>% 
   st_drop_geometry() %>% 
   mutate(month = substr(dates, 1, 7),
          n = 1) %>% 
@@ -150,16 +151,16 @@ ggplot(temp.trend, aes(x = month, y = sum)) +
 grid.fires <- subset(grid.fires, select = c("z", "mindate", "geometry")) # Select columns
 colnames(grid.fires)[2] <- "dates" # Rename start date of fire to match date column in control point dataset
 # Add ID to control points
-cnt.pts$z <- paste0("CP", rownames(cnt.pts))
+ctrl.pts$z <- paste0("CP", rownames(ctrl.pts))
 # Arrange columns in control point dataset
-cnt.pts <- cnt.pts[,c(4,2,5,3)]
+ctrl.pts <- ctrl.pts[,c(4,2,5,3)]
 # Convert data column to character
-cnt.pts$dates <- as.character(cnt.pts$dates)
+ctrl.pts$dates <- as.character(ctrl.pts$dates)
 
 # Remove land cover and ID columns from control points
-cnt.pts <- subset(cnt.pts, select = -c(lc, x))
+ctrl.pts <- subset(ctrl.pts, select = -c(lc, x))
 # Merge datasets
-fin.pix <- rbind(grid.fires, cnt.pts) 
+fin.pix <- rbind(grid.fires, ctrl.pts) 
 
 # Add new ID to each grid cell (both fire and non-fire)
 fin.pix$pix <- paste0("PX", rownames(fin.pix))
