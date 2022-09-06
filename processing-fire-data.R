@@ -84,6 +84,9 @@ grid.eq <- grid.sub %>%
 # Randomly assign date to point between the start date of your study and the end date
 grid.eq$dates <- sample(seq(start, end, by = 1), nrow(grid.eq), replace = T)
 
+# Remove duplicates
+grid.eq <- grid.eq[!duplicated(grid.eq),]
+
 # Add ID variable to control points
 grid.eq$x <- row.names(grid.eq)
 
