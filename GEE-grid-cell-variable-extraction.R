@@ -1,3 +1,5 @@
+# Extract covariates within grid cells using datasets from the GEE catalogue
+
 # Clear data
 rm(list = ls())
 
@@ -18,8 +20,6 @@ pixels$first()$propertyNames()$getInfo() ## Each grid cell has a 'z' and a 'pix'
 ## All 'pix' values are unique, but grid cells within a fire patch have same 'z' value
 # Vector of dates 
 dts <- unique(pixels$aggregate_array('dates')$getInfo())
-
-# Extract covariates within grid cells using datasets from the GEE catalogue
 
 #### NDVI ##########################
 
