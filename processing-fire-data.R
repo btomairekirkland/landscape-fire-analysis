@@ -20,27 +20,22 @@ fires <- read.csv("fires-clipped.csv")
 # Read in land cover and extract land cover type at centre point of pixel
 lc <- raster("simp_land_cover.tif") ## Obtained from https://github.com/tpfd/Polesia-Landcover 
 
-# Obtained study period dates 
+# Obtain study period dates 
 start <- min(as.Date(fires$mindt))
 end <- max(as.Date(fires$maxdt))
 
 # Name the main folder where the individual shapefiles for fires are stored
 dirname <- "~/BTO projects/Polesia wildfires/fire shapefiles/polygons_6D_fixed"
-
 # List files within sub directories
 filenames <- list.files(path = dirname, pattern = ".shp", recursive = T)
-
 # Create empty list to fill with polygon data 
 list <- list(data.frame(matrix(NA, ncol = 7)))
-
 # Read in polygon data information and save in list
 for( i in 1:length(filenames) ){
   list[[i]] <- st_read(paste0(dirname, "/", filenames[i]))
 }
-
 # Merge list into single sf object
 sf.ob <- do.call(rbind, list)
-
 # Select columns
 sf.ob <- subset(sf.ob, select = c(z, mindate, maxdate, geometry))
 
