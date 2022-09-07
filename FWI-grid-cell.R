@@ -41,20 +41,15 @@ dc.12.lst <- list() ## 12 months
 
 # Loop through each date reading in rasters calculating the mean value within grid cells
 for (i in 1:length(dates)) {
-    
     dc.lst[[i]] <- as.data.frame(extract(raster(list.files(path = dc.wd, pattern = dates[i], full.names = T,recursive = T)), 
                         pix[pix$dates == dates[i],], fun = mean)) 
-
     # And lagged drought code (3, 6 and 12 months before)
     dc.3.lst[[i]] <- as.data.frame(extract(raster(list.files(path = dc.wd, pattern = month3[i], full.names = T,recursive = T)), 
                         pix[pix$month3 == month3[i],], fun = mean))
-
     dc.6.lst[[i]] <- as.data.frame(extract(raster(list.files(path = dc.wd, pattern = month6[i],full.names = T,recursive = T)), 
                         pix[pix$month6 == month6[i],],  fun = mean))
-
     dc.12.lst[[i]] <- as.data.frame(extract(raster(list.files(path = dc.wd, pattern = month12[i], full.name = T,recursive  = T)), 
                         pix[pix$month12 == month12[i],], fun = mean))
-
 }
 
 # Merge dataframes in list    
@@ -82,22 +77,16 @@ kbdi.12.lst <- list()
 
 # Loop through each date reading in rasters calculating the mean value within grid cells
 for (i in 1:length(dates)) {
-  
   kbdi.lst[[i]] <- as.data.frame(extract(raster(list.files(path = kbdi.wd, pattern = dates[i], full.names = T,recursive = T)), 
-                        pix[pix$dates == dates[i],], fun = mean)) 
-  
+                          pix[pix$dates == dates[i],], fun = mean)) 
   # And lagged drought code (3, 6 and 12 months before)
   kbdi.3.lst[[i]] <- as.data.frame(extract(raster(list.files(path = kbdi.wd, pattern = month3[i], full.names = T,recursive = T)), 
                           pix[pix$month3 == month3[i],], fun = mean))
-  
   kbdi.6.lst[[i]] <- as.data.frame(extract(raster(list.files(path = kbdi.wd, pattern = month6[i], full.names = T,recursive = T)), 
                           pix[pix$month6 == month6[i],], fun = mean))
-  
   kbdi.12.lst[[i]] <- as.data.frame(extract(raster(list.files(path = kbdi.wd, pattern = month12[i], full.names = T,recursive = T)), 
                           pix[pix$month12 == month12[i],], fun = mean))
-  
 }
-
 
 # Merge dataframes in list    
 kbdi.df <- do.call("rbind", kbdi.lst)
@@ -121,14 +110,12 @@ ffmc.lst <- list()
 
 # Loop through each date reading in rasters calculating the mean value within grid cells
 for (i in 1:length(dates)) {
-  
   ffmc.lst[[i]] <- as.data.frame(extract(raster(list.files(path = ffmc.wd, pattern = dates[i], full.names = T,recursive = T)), 
                                         pix[pix$dates == dates[i],], fun = mean)) 
 } ## No lagged data for moisture content
 
 # Merge dataframes in list    
 ffmc.df <- do.call("rbind", ffmc.lst)
-
 # Change column name
 colnames(ffmc.df) <- "ffmc"
 
@@ -142,7 +129,6 @@ fwi.lst <- list()
 
 # Loop through each date reading in all rasters and calculating the mean value within grid cells
 for (i in 1:length(dates)) {
-  
   fwi.lst[[i]] <- as.data.frame(extract(raster(list.files(path = fwi.wd, pattern = dates[i], full.names = T,recursive = T)), 
                                          pix[pix$dates == dates[i],], fun = mean)) 
 } ## No lagged data for fire weather index
@@ -154,18 +140,13 @@ fwi.df <- do.call("rbind", fwi.lst)
 colnames(fwi.df) <- "fwi"
 
 #### Merge all dataframes ####
-
 dfs <- sapply(.GlobalEnv, is.data.frame) 
 df <- do.call(cbind, mget(names(dfs)[dfs]))
-
 # Rename columns
 colnames(df)[11:12] <- c("z", "pix")
 check <- select(df, -contains("pix.")) # Remove dates and geometry
-
 # Export as csv file
-
 # Set working directory to where output files are being stored
 setwd("~/BTO projects/Polesia wildfires/input variables/pixels")
-write.csv(df, "FDI.csv", row.names = F)
-## Outputs are dataframe of fire weather indices and grid cell IDs
+write.csv(df, "FDI.csv", row.names = F) ## Outputs are dataframe of fire weather indices and grid cell IDs
 
