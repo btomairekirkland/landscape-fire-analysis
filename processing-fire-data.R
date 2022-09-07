@@ -1,5 +1,6 @@
 # Processing FRY data obtained from https://www.nature.com/articles/sdata2018132 and creating non-fire control points
 
+# Clear data
 rm(list = ls())
 
 # Load libraries 
@@ -10,13 +11,10 @@ library(ggplot2)
 library(dplyr)
 
 # First read in data, including fire data spreadsheets and shapefiles and land cover data
-
 # Set working directory
 setwd("~/BTO projects/Polesia wildfires")
-
 # Read in wildfire trait data obtained from https://www.nature.com/articles/sdata2018132 
 fires <- read.csv("fires-clipped.csv")
-
 # Read in land cover and extract land cover type at centre point of pixel
 lc <- raster("simp_land_cover.tif") ## Obtained from https://github.com/tpfd/Polesia-Landcover 
 
@@ -156,10 +154,8 @@ ctrl.pts$dates <- as.character(ctrl.pts$dates)
 ctrl.pts <- subset(ctrl.pts, select = -c(lc, x))
 # Merge datasets
 fin.pix <- rbind(grid.fires, ctrl.pts) 
-
 # Add new ID to each grid cell (both fire and non-fire)
 fin.pix$pix <- paste0("PX", rownames(fin.pix))
-
 # Reorder columns
 fin.pix <- fin.pix[,c(1,4,2,3)]
 
