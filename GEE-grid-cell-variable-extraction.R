@@ -5,10 +5,7 @@ rm(list = ls())
 
 # Load libraries
 library(rgee)
-library(reticulate)
 library(lubridate)
-library(dplyr)
-library(tidyr)
 
 ee_Initialize() ##  Initialize GEE language
 
@@ -269,115 +266,6 @@ soil.df <- ee$FeatureCollection(soil.lst)$flatten()
 soil.exp <- ee$batch$Export$table(soil.df, 'soil-moisture', list(driveFolder = 'pixels', 
                                                                             selectors = c('z', 'pix', 'soil_moist'))) 
 soil.exp$start()
-ee_monitoring()
-
-#### SNOW COVER ##########################
-
-snow.aqua <- ee$ImageCollection("MODIS/006/MYD10A1")$
-  select('NDSI_Snow_Cover')
-snow.terra <- ee$ImageCollection("MODIS/006/MOD10A1")$
-  select('NDSI_Snow_Cover')
-
-# Merge feature collections
-snow <- snow.terra$merge(snow.aqua)
-
-# Create empty list to fill with maximum, minimum, and mean snow cover during the winter period
-snow.mean <- list()
-snow.mx <- list()
-snow.min <- list()
-
-# Calculate snow date
-# First add month variable to dataset to identify winter and non-winter pixels
-pixels <- pixels$map(function (feature) {
-  mnth = ee$Number$parse(ee$String(feature$get('dates'))$slice(5,7)) 
-  sd = ee$String(ee$Date$parse('YYYY-MM-dd', feature$get('dates'))$advance(1, 'day')$format('YYYY-MM-dd'))
-  feature$set('month', mnth)$
-    set('snow_dt', sd) # Add snow date as day after fire date because the last date when filtering images is not included
-})
-
-# Get vector for start and end date to calculate snow cover
-months <- as.numeric(substr(dts, 6, 7)) # First extract month - is the fire in December?
-year <- as.numeric(substr(dts, 1, 4)) # Extract year to paste into snow date 
-snow.date <- 0 # Create vector of dates up to which to calculate snow cover (1st of March if outside of winter)
-str.date <- 0 # Vector of start dates to calculate snow cover
-
-for (i in 1:length(dts)) {
-  snow.date[i] <- ifelse(months[i] != 12 & months[i] != 1 & months[i] != 2, paste0(year[i],"-03-01"), 
-                         as.character(as.Date(dts[i]) + 1))
-  str.date[i] <- ifelse(months[i] == 12, paste0(year[i],"-12-01"), paste0(year[i]-1,"-12-01"))
-}
-
-# Simplify vectors retaining unique dates to speed up processing
-str.date <- str.date[!duplicated(snow.date)]
-snow.date <- snow.date[!duplicated(snow.date)]
-
-# Change snow date for fires outside of winter to last day of winter
-non.winter <- pixels$filter(ee$Filter$rangeContains('month', 3, 11))$
-  map(function (feature) {
-  feature$set('snow_dt', ee$String(feature$get('year'))$cat('-03-01'))
-})
-# Select winter pixels
-winter <- pixels$filter(ee$Filter$inList('month', ee$List(c(1,2,12))))
-
-# Merge into feature collection
-pixels <- ee$FeatureCollection(ee$List(c(winter,non.winter)))$flatten()
-
-for (i in 1:length(snow.date)) {
-  snow.mean[[i]] <- pixels$filter(ee$Filter$eq('snow_dt', snow.date[i]))$map(function (feature) { 
-  ee$Feature(feature$geometry(), snow$filter(ee$Filter$date(str.date[i], snow.date[i]))$mean()
-             # Merge images to calculate mean snow cover over the winter period 
-             $rename('mean_snow')$
-               reduceRegion(
-                 reducer = ee$Reducer$mean(),
-                 geometry = feature$geometry(),
-                 scale = 250
-               ))$
-      set('z', feature$get('z'))$
-      set('pix', feature$get('pix'))
-    }) 
-  
-  snow.mx[[i]] <- pixels$filter(ee$Filter$eq('snow_dt', snow.date[i]))$map(function (feature) { 
-    ee$Feature(feature$geometry(), snow$filter(ee$Filter$date(str.date[i], snow.date[i]))$max()
-               # Repeat for maximum snow cover
-               $rename('max_snow')$
-                 reduceRegion(
-                   reducer = ee$Reducer$mean(),
-                   geometry = feature$geometry(),
-                   scale = 250
-                 ))$
-      set('z', feature$get('z'))$
-      set('pix', feature$get('pix'))
-    })
-
-  snow.min[[i]] <- pixels$filter(ee$Filter$eq('snow_dt', snow.date[i]))$map(function (feature) { 
-    ee$Feature(feature$geometry(), snow$filter(ee$Filter$date(str.date[i], snow.date[i]))$min()
-               # Repeat for minimum snow cover
-               $rename('min_snow')$
-                 reduceRegion(
-                   reducer = ee$Reducer$mean(),
-                   geometry = feature$geometry(),
-                   scale = 250
-                 ))$
-      set('z', feature$get('z'))$
-      set('pix', feature$get('pix'))
-    })
-}
-
-# Merge list of feature collections
-snow.mx.df <- ee$FeatureCollection(snow.mx)$flatten()
-snow.min.df <- ee$FeatureCollection(snow.min)$flatten()
-snow.mean.df <- ee$FeatureCollection(snow.mean)$flatten()
-
-# Export
-snow.mean.exp <- ee$batch$Export$table(snow.mean.df, 'mean-snow-cover', list(driveFolder = 'pixels', 
-                                                                             selectors = c('z', 'pix', 'mean_snow'))) 
-snow.mx.exp <- ee$batch$Export$table(snow.mx.df, 'max-snow-cover', list(driveFolder = 'pixels', 
-                                                                        selectors = c('z', 'pix', 'max_snow'))) 
-snow.min.exp <- ee$batch$Export$table(snow.min.df, 'min-snow-cover', list(driveFolder = 'pixels', 
-                                                                          selectors = c('z', 'pix', 'min_snow'))) 
-snow.mean.exp$start()
-snow.mx.exp$start()
-snow.min.exp$start()
 ee_monitoring()
 
 #### GLOBAL FRICTION SURFACE ##########################
