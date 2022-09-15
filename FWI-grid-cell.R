@@ -146,7 +146,5 @@ df <- do.call(cbind, mget(names(dfs)[dfs]))
 colnames(df)[11:12] <- c("z", "pix")
 check <- select(df, -contains("pix.")) # Remove dates and geometry
 # Export as csv file
-# Set working directory to where output files are being stored
-setwd("~/BTO projects/Polesia wildfires/input variables/pixels")
 write.csv(df, "FDI.csv", row.names = F) ## Outputs are dataframe of fire weather indices and grid cell IDs
 
