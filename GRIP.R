@@ -39,7 +39,8 @@ pix$dens_road <- extract(dens, pix, fun = mean, weights = T)
 
 # Drop geometry and export as csv
 df <- st_drop_geometry(pix)
-write.csv(df, "grid-cells-roads.csv", row.names = F)
+setwd("~/BTO projects/Polesia wildfires/input files") # Change working directory to where you are storing output files
+write.csv(df, "grid-cells-roads.csv", row.names = F) # Output file is a dataframe with grid cell IDs, distance to nearest road and road density
 
 # Summarise for each fire patch calculating minimum distance
 fires <- df[!grepl("^CP", df$z),] # Select burnt grid cells
@@ -49,4 +50,5 @@ fires <- fires %>%
             dens_road = mean(dens_road))
 
 # Export as csv
-write.csv(fires, "fire-patches-roads.csv", row.names = F)
+write.csv(fires, "fire-patches-roads.csv", row.names = F) # Output file is same as above but grouped by fires with only fire patch ID
+
