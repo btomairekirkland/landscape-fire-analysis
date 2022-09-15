@@ -9,11 +9,11 @@ library(sf)
 library(raster)
 library(dplyr)
 
-# Read in fire shapefiles
+# Read in shapefiles
 setwd("~/BTO projects/Polesia wildfires/fire shapefiles/pixels")
 pix <- st_read("all_pixels.shp") 
 
-# Read in road shapefiels from Asia and Europe (continental shapefiles rather than global to speed up processing) and global road density raster
+# Read in road shapefiles from Asia and Europe (continental shapefiles rather than global to speed up processing) and global road density raster
 roads.europe <- st_read("~/BTO projects/Polesia wildfires/input variables/GRIP4_Region4_vector_shp/GRIP4_region4.shp")
 roads.asia <- st_read("~/BTO projects/Polesia wildfires/input variables/GRIP4_Region5_vector_shp/GRIP4_region5.shp")
 dens <- raster("~/BTO projects/Polesia wildfires/input variables/GRIP_density/grip4_total_dens_m_km2.asc")
