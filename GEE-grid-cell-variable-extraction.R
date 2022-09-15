@@ -1,5 +1,5 @@
 # Extract covariates within grid cells using datasets from the GEE catalogue
-# To use the ouput of this file for subsequent analysis you will need to download them from your Google Drive
+# To use the ouput of this file for subsequent analysis you will need to download the files from your Google Drive
 
 # Clear data
 rm(list = ls())
