@@ -16,7 +16,7 @@ setwd("~/BTO projects/Polesia wildfires")
 # Read in wildfire trait data obtained from https://www.nature.com/articles/sdata2018132 
 fires <- read.csv("fires-clipped.csv")
 # Read in land cover and extract land cover type at centre point of pixel
-lc <- raster("simp_land_cover.tif") ## Obtained from https://github.com/tpfd/Polesia-Landcover 
+lc <- raster("simp_land_cover.tif") ## Land cover map simplified from that obtained from https://github.com/tpfd/Polesia-Landcover and 
 
 # Obtain study period dates 
 start <- min(as.Date(fires$mindt))
