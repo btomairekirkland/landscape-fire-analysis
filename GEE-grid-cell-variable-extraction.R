@@ -222,7 +222,7 @@ soil <- ee$ImageCollection('IDAHO_EPSCOR/TERRACLIMATE')$
 # Create property in grid cell dataset that describes the month for which to collect data 
 ## That month if it is late in the month, or previous month if it is early in the month
 pixels <- pixels$map(function (feature) {
-  day = ee$Number$parse(ee$String(feature$get('dates'))$slice(8,10)) # Create property with day ofthe month
+  day = ee$Number$parse(ee$String(feature$get('dates'))$slice(8,10)) # Create property with day of the month
   feature$set('day', day)
 })
 
