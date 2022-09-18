@@ -15,6 +15,8 @@ library(dplyr)
 setwd("~/BTO projects/Polesia wildfires")
 # Read in wildfire trait data obtained from https://www.nature.com/articles/sdata2018132 
 fires <- read.csv("fires-clipped.csv")
+# Rename patch ID column
+colnames(fires)[which(names(fires) == "ptch_id_Oom")] <- "z"
 # Read in land cover and extract land cover type at centre point of pixel
 lc <- raster("land_cover.tif") ## Land cover map obtained from https://github.com/tpfd/Polesia-Landcover and 
 
