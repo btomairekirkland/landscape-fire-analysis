@@ -290,12 +290,6 @@ pop <- ee$ImageCollection("CIESIN/GPWv411/GPW_Population_Density")$
 # Extract image ID from collection
 pop.id <- pop$aggregate_array('system:index')$getInfo()
 
-# Add year to fire properties
-fires.sp <- fires.sp$map(function (feature) {
-  num = ee$Number$parse(ee$String(feature$get('mindate'))$slice(0,4)) # Selects between the first and 4 elements of a string and converts to a number
-  feature$set('year', num);
-})
-
 # Available years are every 5 years between 2000-2020
 pop.yrs <- seq(2000,2020, 5)
 
