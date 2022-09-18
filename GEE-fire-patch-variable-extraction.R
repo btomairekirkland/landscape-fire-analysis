@@ -52,8 +52,7 @@ for (i in 1:length(new.dts)) {
   # Mean NDVI
   ndvi.mean.lst[[i]] <- 
     ndvi$filter(ee$Filter$date(new.dts[i]))$toBands()$ 
-    # Filter NDVI images for 16 to 8 days before fire starts to get closest NDVI image that spans period
-    # before fire
+    # Filter NDVI images for 16 to 8 days before fire starts to get closest NDVI image that spans period before fire
     reduceRegions( 
       collection = fires.sp$filter(ee$Filter$eq('mindate', fire.dts[i]))$select('z'),
       reducer = ee$Reducer$mean()) 
@@ -293,8 +292,7 @@ pop.id <- pop$aggregate_array('system:index')$getInfo()
 
 # Add year to fire properties
 fires.sp <- fires.sp$map(function (feature) {
-  num = ee$Number$parse(ee$String(feature$get('mindate'))$slice(0,4)) # Selects between the first and 4 elements of a string 
-  # and converts to a number
+  num = ee$Number$parse(ee$String(feature$get('mindate'))$slice(0,4)) # Selects between the first and 4 elements of a string and converts to a number
   feature$set('year', num);
 })
 
@@ -327,4 +325,3 @@ for (i in 1:length(pop.yrs)) {
 pop.df <- ee$FeatureCollection(pop.lst)$flatten()
 pop.exp <- ee$batch$Export$table(pop.df, 'pop', list(driveFolder = 'patches')) 
 pop.exp$start()
-
