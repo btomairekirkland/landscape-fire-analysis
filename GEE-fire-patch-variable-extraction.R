@@ -1,4 +1,4 @@
-# Extract covariates within grid cells using datasets from the GEE catalogue
+# Extract covariates within fire patches using datasets from the GEE catalogue
 # To use the ouput of this file for subsequent analysis you will need to download the files from your Google Drive
 
 # Clear data
