@@ -39,20 +39,14 @@ sf.ob <- do.call(rbind, list)
 # Select columns
 sf.ob <- subset(sf.ob, select = c(z, mindate, maxdate, geometry))
 
-# Merge wildfires sf object with trait data on fires
-fires.sp <- inner_join(sf.ob, fires)
+# Select large fires (>1km2)
+large.fires <- fires[fires$area > 1000000,]
 
-# Remove duplicate columns (e.g., centre lat/lon coordinates, dates) and rename any columns as needed 
-## st_write abbreviates to 7 letters and need unique names
-col.ind <- which( colnames(fires.sp) %in% c("ï..ptch_id","CENTRE.x","CENTRE.y","Sigma_Yx","Sigma_Yy","Sigma_Xx","Sigma_Xy","Sigma_Y_m","Sigma_X_m") )
-colnames(fires.sp)[col.ind] <- 
-  c("ptch_id", "x","y","sigyx", "sigyy","sigxx","sigxy","sigym","sigxm")
+# Filter out smaller fires in shapefiles
+fires.sp <- sf.ob[sf.ob$z %in% large.fires$z,]
 
 # Extract polygons from multipolygons
 fires.sp <- st_collection_extract(fires.sp, "POLYGON")
-
-# Select and export large fires (>1km2)
-large.fires <- fires.sp[fires.sp$area > 1000000,]
 
 # Export shapefile of fire patches
 st_write(large.fires, "fire_patches.shp", append = F)
