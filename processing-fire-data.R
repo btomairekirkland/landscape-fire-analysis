@@ -58,11 +58,12 @@ st_write(large.fires, "fire_patches.shp", append = F)
 # Grid burnt grid cells 
 grid <- st_make_grid(large.fires, cellsize = 0.0022457331) ## 250m2
 grid.sf <- st_as_sf(grid)
-# Change geometry column name
-st_geometry(grid.sf) <- grid.sf$x; st_geometry(grid.sf) <- "geometry"
-grid.fires <- grid.sf[st_join(x = st_centroid(grid.sf), y = fires, left = F),] # Select grid cells whose centre point overlaps 
-                                                                               # with a fire
-grid.fires <- st_join(x = grid.fires, y = fires, left = F) # Merge with fire dataset
+grid.fires <- st_join(x = st_centroid(grid.sf), y = fires, left = F) # Select grid cells whose centre point overlaps 
+                                                                  # with a fire
+st_crs(grid.fires) <- NA # Remove CRS 
+grid.fires <- st_buffer(grid.fires, 0.0022457331/2, endCapStyle = "SQUARE", nQuadSegs = 1) # Add 250m2 buffer
+                                                                                           # around centre point
+st_crs(grid.fires) <- st_crs(grid.sf) # Specify CRS
 
 # Create control points (non-fire observations)
 # Extract land cover type at centre point of control points
