@@ -1,5 +1,4 @@
-# Extracting fire danger indices from https://cds.climate.copernicus.eu/cdsapp#!/dataset/cems-fire-historical?tab=overview 
-# within grid cells
+# Extracting fire danger indices from https://cds.climate.copernicus.eu/cdsapp#!/dataset/cems-fire-historical?tab=overview within grid cells
 
 # Clear data
 rm(list = ls())
@@ -147,5 +146,4 @@ colnames(df)[11:12] <- c("z", "pix")
 check <- select(df, -contains("pix.")) # Remove dates and geometry
 # Export as csv file
 setwd("~/BTO projects/Polesia wildfires/input variables") # Change working directory to where you are storing your output files
-write.csv(df, "FDI.csv", row.names = F) ## Outputs are dataframe of fire weather indices and grid cell IDs
-
+write.csv(df, "FWI.csv", row.names = F) ## Outputs are dataframe of fire weather indices and grid cell IDs
