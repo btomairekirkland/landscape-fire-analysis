@@ -68,32 +68,32 @@ Thanks to Wentao Chen and Florent Mouillot of Le Centre National de la Recherche
 
 ## References
 
-Abatzoglou, J.T. et al. (2018) ‘TerraClimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958–2015’, Scientific Data, 5(1), p. 170191. Available at: https://doi.org/10.1038/sdata.2017.191.
+Abatzoglou, J. T., Dobrowski, S. Z., Parks, S. A. & Hegewisch, K. C. (2018) TerraClimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958–2015. Sci. Data 5, 170191.
 
-Amiro, B.D. et al. (2004) ‘Fire weather index system components for large fires in the Canadian boreal forest’, International Journal of Wildland Fire, 13(4), p. 391. Available at: https://doi.org/10.1071/WF03066.
+Amiro, B. D. et al. (2004) Fire weather index system components for large fires in the Canadian boreal forest. Int. J. Wildland Fire 13, 391.
 
-Ayba, C. et al. (2022) rgee: R Bindings for Calling the ‘Earth Engine’ API. Available at: https://CRAN.R-project.org/package=rgee (Accessed: 21 September 2022).
+Ayba, C. et al. (2022) rgee: R Bindings for Calling the ‘Earth Engine’ API. 
 
-Center for International Earth Science Information Network - CIESIN - Columbia University (2017) ‘Gridded Population of the World, Version 4 (GPWv4): Population Density, Revision 10’. NASA Socioeconomic Data and Applications Center (SEDAC). Available at: https://doi.org/10.7927/H4DZ068D.
+Center for International Earth Science Information Network (2017) Gridded Population of the World, Version 4 (GPWv4): Population Density, Revision 10. 
 
-Gorelick, N. et al. (2017) ‘Google Earth Engine: Planetary-scale geospatial analysis for everyone’, Remote Sensing of Environment, 202, pp. 18–27. Available at: https://doi.org/10.1016/j.rse.2017.06.031.
+Gorelick, N. et al. (2017) Google Earth Engine: Planetary-scale geospatial analysis for everyone. Remote Sens. Environ. 202, 18–27.
 
-Hersbach, H. et al. (2020) ‘The ERA5 global reanalysis’, Quarterly Journal of the Royal Meteorological Society, 146(730), pp. 1999–2049. Available at: https://doi.org/10.1002/qj.3803.
+Hersbach, H. et al. (2020) The ERA5 global reanalysis. Q. J. R. Meteorol. Soc. 146, 1999–2049.
 
-Hijmans, R.J. et al. (2020) raster: Geographic Data Analysis and Modeling. Available at: https://CRAN.R-project.org/package=raster (Accessed: 24 November 2020).
+Hijmans, R. J. et al. (2020) raster: Geographic Data Analysis and Modeling. 
 
-Laurent, P. et al. (2018) ‘FRY, a global database of fire patch functional traits derived from space-borne burned area products’, Scientific Data, 5(1), p. 180132. Available at: https://doi.org/10.1038/sdata.2018.132.
+Laurent, P. et al. (2018) FRY, a global database of fire patch functional traits derived from space-borne burned area products. Sci. Data 5, 180132.
 
-Meijer, J.R. et al. (2018) ‘Global patterns of current and future road infrastructure’, Environmental Research Letters, 13(6), p. 064006. Available at: https://doi.org/10.1088/1748-9326/aabd42.
+Meijer, J. R., Huijbregts, M. A. J., Schotten, K. C. G. J. & Schipper, A. M. (2018) Global patterns of current and future road infrastructure. Environ. Res. Lett. 13, 064006.
 
-Pebesma, E. et al. (2020) sf: Simple Features for R. Available at: https://CRAN.R-project.org/package=sf (Accessed: 24 November 2020).
+Pebesma, E. et al. (2020) sf: Simple Features for R.
 
-Preisler, H. et al. (2004) ‘Probability based models for estimation of wildfire risk’, International Journal of Wildland Fire. 13(2): 133-142, 13(2), pp. 133–142. Available at: https://doi.org/10.1071/WF02061.
+Preisler, H., Brillinger, D. R., Burgan, R. E. & Benoit, J. (2004) Probability based models for estimation of wildfire risk. Int. J. Wildland Fire 132 133-142 13, 133–142.
 
-Tamiminia, H. et al. (2020) ‘Google Earth Engine for geo-big data applications: A meta-analysis and systematic review’, ISPRS Journal of Photogrammetry and Remote Sensing, 164, pp. 152–170. Available at: https://doi.org/10.1016/j.isprsjprs.2020.04.001.
+Tamiminia, H. et al. (2020) Google Earth Engine for geo-big data applications: A meta-analysis and systematic review. ISPRS J. Photogramm. Remote Sens. 164, 152–170.
 
-Vilar, L. et al. (2010) ‘A model for predicting human-caused wildfire occurrence in the region of Madrid, Spain’. Available at: https://pubag.nal.usda.gov/catalog/784407 (Accessed: 14 July 2022).
+Vilar, L., Woolford, D. G., Martell, D. L. & Martín, M. P. (2010) A model for predicting human-caused wildfire occurrence in the region of Madrid, Spain. Int. J. Wildland Fire 19, 325–337.
 
-Weiss, D.J. et al. (2018) ‘A global map of travel time to cities to assess inequalities in accessibility in 2015’, Nature. Available at: https://doi.org/10.1038/nature25181.
+Weiss, D. J. et al. (2018) A global map of travel time to cities to assess inequalities in accessibility in 2015. Nature (2018) doi:10.1038/nature25181.
 
-Weiss, D.J. et al. (2020) ‘Global maps of travel time to healthcare facilities’, Nature Medicine, 26(12), pp. 1835–1838. Available at: https://doi.org/10.1038/s41591-020-1059-1.
+Weiss, D. J. et al. (2020) Global maps of travel time to healthcare facilities. Nat. Med. 26, 1835–1838.
