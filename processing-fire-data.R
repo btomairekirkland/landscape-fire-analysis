@@ -144,7 +144,7 @@ colnames(grid.fires)[2] <- "dates" # Rename start date of fire to match date col
 ctrl.pts$z <- paste0("CP", rownames(ctrl.pts))
 # Arrange columns in control point dataset
 ctrl.pts <- ctrl.pts[,c(4,2,5,3)]
-# Convert data column to character
+# Convert date column to character
 ctrl.pts$dates <- as.character(ctrl.pts$dates)
 
 # Remove land cover and ID columns from control points
@@ -158,3 +158,12 @@ fin.pix <- fin.pix[,c(1,4,2,3)]
 
 # Export dated grid cell dataset
 st_write(fin.pix, "all_pixels.shp", append = F)
+
+# Extract centroid coordinates and temporal information of grid cells and save as .csv to merge with covariate data prior to analysis
+info <- as.data.frame(st_coordinates(st_centroid(fin.pix)))
+info <- cbind(info, st_drop_geometry(fin.pix))
+info$mnth <- substr(fin.pix$dates, 6, 7)
+info$year <- substr(fin.pix$dates, 1, 4)
+info$n_year <- info$year - min(info$year) + 1
+info$day <- yday(as.Date(fin.pix$dates))
+write.csv(info, "grid-cell-info.csv", row.names = F) 
