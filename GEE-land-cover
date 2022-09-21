@@ -4,56 +4,56 @@
 // First for some data cleaning
 // Remove unclassified pixels at boundary 
 // First need to reclassify unclassified pixels in center of map caused by e.g., clouds
-var reclassified = lc.clip(boundary)
+// var reclassified = lc.clip(boundary)
                       .remap([0], [14]);
 
 // In the land cover map, where the reclassified map equals 14, 
 // replace the value in the original map with 14                      
-var lc =  lc.where(reclassified.eq(14), 14)
-      .selfMask() // Mask out pixels with a value of 0
+//var lc =  lc.where(reclassified.eq(14), 14)
+//      .selfMask() // Mask out pixels with a value of 0
 
 // Simplify land cover map by grouping land cover types
-var simp = lc.remap([1,2,3,4,5,6,7,8,9,10,11,12,13,14], 
+// var simp = lc.remap([1,2,3,4,5,6,7,8,9,10,11,12,13,14], 
   [1,1,2,2,1,2,3,4,5,6,7,8,9,10]);
 
 // Define palette for different land cover types 
-var newPalette = [
-  '336600', // Coniferous forest (1) - dark green
-  '33cc33', // Deciduous forest  (2) - bright green
-  'ffb3ff', // Meadows (3) - purple
-  'FFFF00', // Agriculture (4) - yellow
-  'cc6600', // Raised bog (5) - brown
-  '808000', // Fen and transitional mire (6) - olive green
-  'F0E68C', // Scrub (7) - khaki
-  '0000FF', // Water (8) - blue
-  '000000', // Urban (9) - black  
-  'c2c2d6', // (10) - grey
-];
+// var newPalette = [
+//  '336600', // Coniferous forest (1) - dark green
+//  '33cc33', // Deciduous forest  (2) - bright green
+//  'ffb3ff', // Meadows (3) - purple
+//  'FFFF00', // Agriculture (4) - yellow
+//  'cc6600', // Raised bog (5) - brown
+//  '808000', // Fen and transitional mire (6) - olive green
+//  'F0E68C', // Scrub (7) - khaki
+//  '0000FF', // Water (8) - blue
+//  '000000', // Urban (9) - black  
+//  'c2c2d6', // (10) - grey
+// ];
 
 // View land cover map
-Map.addLayer(simp, {min: 1, max: 10, palette: newPalette}, 'Simple land cover');
+// Map.addLayer(simp, {min: 1, max: 10, palette: newPalette}, 'Simple land cover');
 
 // Name of the land covers
-var newNames = ['Coniferous forest', 'Deciduous forest',  
-'Meadows', 'Agriculture', 'Raised bog', 'Fen and transitional mire', 'Scrub', 
-'Water', 'Urban', 'Unclassified'];
+// var newNames = ['Coniferous forest', 'Deciduous forest',  
+// 'Meadows', 'Agriculture', 'Raised bog', 'Fen and transitional mire', 'Scrub', 
+// 'Water', 'Urban', 'Unclassified'];
  
 // Add color and and names
-for (var i = 0; i < 10; i++) {
-  legend.add(makeRow(newPalette[i], newNames[i]));
-}
+// for (var i = 0; i < 10; i++) {
+//  legend.add(makeRow(newPalette[i], newNames[i]));
+// }
  
 // Add legend to map (alternatively you can also print the legend to the console)
-Map.add(legend);
+// Map.add(legend);
 
 // Explore metadata
 print(lc, 'Land cover data');
-print(simp, 'Simple land cover data');
+// print(simp, 'Simple land cover data');
 
 // Extract histogram of land covers within fire/non-fire grid cells
 // Loop throught each grid cell as compuationally intensive
 var lcFires = pixels.map(function (feature) {
-  return ee.Feature(feature.geometry(), simp.reduceRegion({
+  return ee.Feature(feature.geometry(), lc.reduceRegion({
   reducer: ee.Reducer.frequencyHistogram(),
   geometry: feature.geometry(),
 
