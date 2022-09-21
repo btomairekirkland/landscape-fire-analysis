@@ -15,7 +15,7 @@ The code is written predominantly in R version 4.0.5, with the following librari
 
 Install rgee: https://r-spatial.github.io/rgee/ 
 
-## Overview of methods: 
+## Overview of methods
 
 The fire datasets used in this work were provided by Wentao Chan and Florent Mouillot from Le Centre National de la Recherche Scientifique, France. They are part of the global FRY dataset, based on the European Space Agency's FireCCI products, and include polygon shapefiles for fires larger than 4x250m2 pixels and fire patch trait dataset for all fires (Laurent et al., 2018). We focus on larger, and therefore likely more severe, fire patches over 1km2, occurring in Polesia since 2001, using a cut-off period for 6 days to group burnt pixels. We used a land cover map of Polesia provided by Mark de Jong of the Canadian Forest Service and Thomas Dowling from UNEP to process the fire data. Using Google Earth Engine (Gorelick et al., 2017; Tamiminia et al., 2020), we simplified the classification from 14 to the following ten land cover types:
 
@@ -52,7 +52,7 @@ We extracted daily fire danger metrics, available from the Copernicus Climate Da
 
 We overlaid our grid with all other maps, and for covariates (2) to (12) extracted mean values within voxels. For each fire patch, we extracted minimum or maximum values over the lifetime of the fire, assuming that fires are more likely a product of extreme conditions rather than average tendencies (Amiro et al., 2004). In order to allow processing over the very large gridded dataset, we mapped functions over each individual voxel. Occasionally, we split the dataset into halves and processed each half separately (e.g., when extracting data on temperature and rainfall) so as not to exceed Google Earth Engine’s user memory limit. 
 
-## User guide: 
+## User guide
 
 Within ‘processing-fire-data.R’, you will need to change the specified working directory to where you are storing your wildfire trait dataset and shapefiles, as well as your own land cover map. The amount of files and folders you need to rename and set up should be fairly minimal, if using fire data from the FRY database. When sampling non-fire observations across land cover types, you may need to change the values used to remove cells centred around water or unclassified land cover types, depending on the values used in your land cover map. You may also need to change the number of cells you want to sample depending on how many fire observations you have and the ratio of fire to non-fire observations you want to obtain. Once you have processed the fire data, all other scripts build upon the outputs from this file. 
 
@@ -66,7 +66,7 @@ Using the datasets provided, you can run a simple generalised addative model fol
 
 Thanks to Wentao Chen and Florent Mouillot of Le Centre National de la Recherche Scientifique. Their input was invaluable in the acquiring and preparation of the fire data. Thanks also to Mark de Jong of the Canadian Forest Service and Thomas Dowling from United Nations Environment Programme (UNEP) for creating the land cover map for Polesia. Thanks to Mark for his invaluable knowledge of fire ecology and his continuous input and feedback. Thanks to Megan Critchley and Susana Baena from UNEP for their help with managing and handling the remote sensing data. Finally, we are grateful to the Endangered Landscapes Programme for funding this work.
 
-## References: 
+## References
 
 Abatzoglou, J.T. et al. (2018) ‘TerraClimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958–2015’, Scientific Data, 5(1), p. 170191. Available at: https://doi.org/10.1038/sdata.2017.191.
 
