@@ -42,7 +42,7 @@ df <- st_drop_geometry(pix)
 setwd("~/BTO projects/Polesia wildfires/input files") # Change working directory to where you are storing output files
 write.csv(df, "grid-cells-roads.csv", row.names = F) # Output file is a dataframe with grid cell IDs, distance to nearest road and road density
 
-# Summarise for each fire patch calculating minimum distance
+# Can summarise for each fire patch by calculating minimum distance or repeat abova with ignition shapefiles 
 fires <- df[!grepl("^CP", df$z),] # Select burnt grid cells
 fires <- fires %>% 
   group_by(z) %>% 
@@ -51,4 +51,3 @@ fires <- fires %>%
 
 # Export as csv
 write.csv(fires, "fire-patches-roads.csv", row.names = F) # Output file is same as above but grouped by fires with only fire patch ID
-
