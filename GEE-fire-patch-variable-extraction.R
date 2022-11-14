@@ -46,7 +46,7 @@ colnames(fire.tab) <- "date" # Change column name
 ndvi.dt = data.table(date = as.Date(ndvi.end.date), key = 'date') # What is the last date of the NDVI composite image?
 
 # For each fire date, join the closest value end date for the NDVI image while rolling to infinity
-indx <- dates[fire.tab, roll = Inf, which = T]
+indx <- ndvi.dt[fire.tab, roll = Inf, which = T]
 
 # 'indx' is the location in the vector of the NDVI end dates at are closest to the end of the fire date
 # Extract the start date of the previous NDVI image 
