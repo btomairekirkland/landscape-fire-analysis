@@ -7,6 +7,7 @@ rm(list = ls())
 # Load libraries
 library(rgee)
 library(lubridate)
+library(date.table)
 
 ee_Initialize() ##  Initialize GEE language
 
@@ -34,13 +35,26 @@ ndvi <- ndvi.terra$merge(ndvi.aqua)
 ndvi.str.date <- as.Date(gsub("_", "-", substring(ndvi$aggregate_array('system:index')$getInfo() ,3)))
 ndvi.end.date <- as.Date(ndvi.str.date) %m-% days(1)
 
-# Create vector to fill with new dates
-new.dts <- fire.dts
-# Correspond NDVI date to fire date
-for (i in 1:length(ndvi.str.date)) {
-  new.dts[as.Date(fire.dts) >= ndvi.str.date[i+1] & as.Date(fire.dts) <= ndvi.end.date[i+2]] <- 
-    as.character(ndvi.str.date[i])
-}
+# Order by date
+ndvi.str.date <- ndvi.str.date[order(ndvi.str.date)]
+ndvi.end.date <- ndvi.str.date[order(ndvi.end.date)]
+
+# Find closest proceeding NDVI image was not taken during or after the fire
+# Create vector of unique end dates for fires
+fire.tab = data.table(as.Date(fire.dts)) # What was the last day of the fire? 
+colnames(fire.tab) <- "date" # Change column name
+ndvi.dt = data.table(date = as.Date(ndvi.end.date), key = 'date') # What is the last date of the NDVI composite image?
+
+# For each fire date, join the closest value end date for the NDVI image while rolling to infinity
+indx <- dates[fire.tab, roll = Inf, which = T]
+
+# 'indx' is the location in the vector of the NDVI end dates at are closest to the end of the fire date
+# Extract the start date of the previous NDVI image 
+new.dts <- as.character(ndvi.str.date[indx-1])
+
+# How close are these images to the fires?
+diff <- difftime(as.Date(ndvi.dt), as.Date(fire.dts), units = "days")
+min(diff);max(diff);mean(diff)
 
 ## Create empty list to fill with NDVI values
 ndvi.mean.lst <- list()
