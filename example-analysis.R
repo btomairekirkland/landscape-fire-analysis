@@ -112,4 +112,3 @@ ggplot(new.df) +
   ylab("Probability of burning") +
   theme(axis.title.y = element_text(margin = unit(c(0, 5, 0, 0), "mm")),
         axis.title.x = element_text(margin = unit(c(3, 0, 0, 0), "mm")))
-
