@@ -5,9 +5,7 @@ rm(list = ls())
 
 # Load libraries
 library(mgcv)
-library(interactions)
 library(ggplot2)
-library(gridExtra)
 library(dplyr)
 
 # Read in your gridded fire data sample
