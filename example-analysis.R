@@ -10,7 +10,7 @@ library(ggplot2)
 library(gridExtra)
 library(dplyr)
 
-# Read in your gridded fire dataset
+# Read in your gridded fire data sample
 setwd("~/BTO projects/Polesia wildfires")
 pix <- read.csv("pixel-df.csv", stringsAsFactors = T) 
 
@@ -53,7 +53,7 @@ corrplot(tmp, type="upper", diag = F, # Add coefficient of correlation
          col=brewer.pal(n = 8, name = "PuOr")) # Text label color and rotation
 
 # Add weight for each land cover type
-## This is a dataframe with the weights to be used in the model, which reflects the proportion of each land cover type sampled 
+# This is a dataframe with the weights to be used in the model, which reflects the proportion of each land cover type sampled 
 ## One row for each voxel with the weight assigned to the land cover type at the centre point of the voxel 
 weights <- read.csv("model-weights.csv")
 df <- inner_join(df, weights)
