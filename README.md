@@ -11,7 +11,6 @@ The code is written predominantly in R version 4.0.5, with the following librari
 * lubridate
 * ggplot2
 * mgcv
-* itsadug
 
 Install rgee: https://r-spatial.github.io/rgee/ 
 
