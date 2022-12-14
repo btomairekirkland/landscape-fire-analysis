@@ -64,6 +64,7 @@ st_write(ign, "ignition_points.shp", append = F)
 # Grid fire data
 grid <- st_make_grid(large.fires, cellsize = 0.0022457331) ## 250m2
 grid.sf <- st_as_sf(grid)
+st_geometry(grid.sf) <- "geometry" # Rneame geometry column
 grid.fires <- st_join(x = st_centroid(grid.sf), y = fires, left = F) # Select grid cells whose centre point overlaps 
                                                                   # with a fire
 st_crs(grid.fires) <- NA # Remove CRS 
@@ -147,24 +148,35 @@ ggplot(temp.trend, aes(x = month, y = sum)) +
         axis.title.y = element_text(margin = unit(c(0, 2.5, 0, 0), "mm"))) +
   scale_x_discrete(expand = c(.01,.01)) 
 
-# Combine with gridded burnt pixels
-grid.fires <- subset(grid.fires, select = c("z", "mindate", "geometry")) # Select columns
+# Combine with gridded pixels
+grid.fires <- subset(grid.fires, select = c("z", "mindate", "lc", "geometry")) # Select columns
 colnames(grid.fires)[2] <- "dates" # Rename start date of fire to match date column in control point dataset
 # Add ID to control points
 ctrl.pts$z <- paste0("CP", rownames(ctrl.pts))
 # Arrange columns in control point dataset
-ctrl.pts <- ctrl.pts[,c(4,2,5,3)]
+cnt.pts <- cnt.pts[,c(5,3,2,1)]
 # Convert date column to character
 ctrl.pts$dates <- as.character(ctrl.pts$dates)
 
-# Remove land cover and ID columns from control points
-ctrl.pts <- subset(ctrl.pts, select = -c(lc, x))
 # Merge datasets
 fin.pix <- rbind(grid.fires, ctrl.pts) 
 # Add new ID to each grid cell (both fire and non-fire)
 fin.pix$pix <- paste0("PX", rownames(fin.pix))
-# Reorder columns
-fin.pix <- fin.pix[,c(1,4,2,3)]
+
+# Create variable for weights to be used in model based on the proportion of land cover types sampled
+# What is the distribution of land cover types across all sample grid cells after removing duplicated grid cells?
+non.dup <- fin.pix
+non.dup[,5:6] <- st_coordinates(st_centroid(non.dup))
+non.dup <- non.dup[!duplicated(non.dup[,5:6]),]
+weights <- as.data.frame(table(grid.sf$lc)/table(non.dup$lc)); colnames(weights) <- c("lc", "weights")
+fin.pix <- merge(fin.pix, weights, by = "lc")
+
+# Add ID to each pixel
+fin.pix$pix <- paste0("PX", rownames(fin.pix))
+
+# Reorder columns and remove land cover column
+fin.pix <- fin.pix[,c(2,6,3,4,5)]
+
 
 # Export dated grid cell dataset
 setwd("~/BTO projects/Polesia wildfires/fire shapefiles/pixels")
