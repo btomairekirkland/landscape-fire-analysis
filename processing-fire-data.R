@@ -49,6 +49,7 @@ fires.sp <- sf.ob[sf.ob$z %in% large.fires$z,]
 fires.sp <- st_collection_extract(fires.sp, "POLYGON")
 
 # Export shapefile of fire patches
+setwd("~/BTO projects/Polesia wildfires/fire shapefiles/fire patches")
 st_write(large.fires, "fire_patches.shp", append = F)
 
 # Create and export fire ignition points 
@@ -57,7 +58,8 @@ ign <- st_as_sf(x = fires,
                 crs = NA)
 ign <- st_buffer(ign, 0.0022457331/2, endCapStyle = "SQUARE", nQuadSegs = 1) # Add 250m2 buffer
 st_crs(ign) <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0" # Add crs info 
-st_write(ign, "ignition_points.shp", append = F) # Export
+setwd("~/BTO projects/Polesia wildfires/fire shapefiles/ignition points") # Export
+st_write(ign, "ignition_points.shp", append = F) 
 
 # Grid fire data
 grid <- st_make_grid(large.fires, cellsize = 0.0022457331) ## 250m2
@@ -165,6 +167,7 @@ fin.pix$pix <- paste0("PX", rownames(fin.pix))
 fin.pix <- fin.pix[,c(1,4,2,3)]
 
 # Export dated grid cell dataset
+setwd("~/BTO projects/Polesia wildfires/fire shapefiles/pixels")
 st_write(fin.pix, "all_pixels.shp", append = F)
 
 # Extract centroid coordinates and temporal information of grid cells and save as .csv to merge with covariate data prior to analysis
@@ -174,4 +177,5 @@ info$mnth <- substr(fin.pix$dates, 6, 7)
 info$year <- substr(fin.pix$dates, 1, 4)
 info$n_year <- info$year - min(info$year) + 1
 info$day <- yday(as.Date(fin.pix$dates))
+setwd("~/BTO projects/Polesia wildfires/input files") # Change working directory to where you are storing output files
 write.csv(info, "grid-cell-info.csv", row.names = F) 
