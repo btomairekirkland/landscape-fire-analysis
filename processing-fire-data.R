@@ -51,7 +51,15 @@ fires.sp <- st_collection_extract(fires.sp, "POLYGON")
 # Export shapefile of fire patches
 st_write(large.fires, "fire_patches.shp", append = F)
 
-# Grid burnt grid cells 
+# Create and export fire ignition points 
+ign <- st_as_sf(x = fires, 
+                coords = c("i.centre.x", "i.centre.y"),
+                crs = NA)
+ign <- st_buffer(ign, 0.0022457331/2, endCapStyle = "SQUARE", nQuadSegs = 1) # Add 250m2 buffer
+st_crs(ign) <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0" # Add crs info 
+st_write(ign, "ignition_points.shp", append = F) # Export
+
+# Grid fire data
 grid <- st_make_grid(large.fires, cellsize = 0.0022457331) ## 250m2
 grid.sf <- st_as_sf(grid)
 grid.fires <- st_join(x = st_centroid(grid.sf), y = fires, left = F) # Select grid cells whose centre point overlaps 
