@@ -72,7 +72,7 @@ for (i in 1:length(unique(shp$month3))) {
 for (i in 1:length(unique(shp$month6))) {
   s3 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
   crs(s3) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
-  s3 <- projectRaster(s1, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+  s3 <- projectRaster(s3, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
   drought.6.mx[[i]] <- as.data.frame(extract(s3, shp[shp$month6 == unique(shp$month6)[i],], fun = max))
 }
 for (i in 1:length(unique(shp$month12))) {
