@@ -57,49 +57,29 @@ diff <- difftime(as.Date(ndvi.dt), as.Date(fire.dts), units = "days")
 min(diff);max(diff);mean(diff)
 
 ## Create empty list to fill with NDVI values
-ndvi.mean.lst <- list()
-ndvi.mx.lst <- list()
-ndvi.min.lst <- list()
+ndvi.lst <- list()
 
 # Extract NDVI values
 for (i in 1:length(new.dts)) {
-  # Mean NDVI
-  ndvi.mean.lst[[i]] <- 
+  ndvi.lst[[i]] <- 
     ndvi$filter(ee$Filter$date(new.dts[i]))$toBands()$ 
     # Filter NDVI images for 16 to 8 days before fire starts to get closest NDVI image that spans period before fire
     reduceRegions( 
       collection = fires.sp$filter(ee$Filter$eq('mindate', fire.dts[i]))$select('z'),
-      reducer = ee$Reducer$mean()) 
-  # Repeat for maximum NDVI
-  ndvi.mx.lst[[i]] <- 
-    ndvi$filter(ee$Filter$date(new.dts[i]))$toBands()$ 
-    reduceRegions( 
-      collection = fires.sp$filter(ee$Filter$eq('mindate', fire.dts[i]))$select('z'),
-      reducer = ee$Reducer$max(),
-      scale = 250) 
-  # Repeat for minimum NDVI
-  ndvi.min.lst[[i]] <- 
-    ndvi$filter(ee$Filter$date(new.dts[i]))$toBands()$ 
-    reduceRegions( 
-      collection = fires.sp$filter(ee$Filter$eq('mindate', fire.dts[i]))$select('z'),
-      reducer = ee$Reducer$min(),
-      scale = 250) 
+      reducer = ee$Reducer$mean()$combine(
+        ee$Reducer$max(), sharedInputs = TRUE)$combine(
+          ee$Reducer$min(), sharedInputs = TRUE),
+      scale = 250
+    ) 
 }
 
 # Merge list of feature collections
-ndvi.mean.df <- ee$FeatureCollection(ndvi.mean.lst)$flatten()
-ndvi.min.df <- ee$FeatureCollection(ndvi.min.lst)$flatten()
-ndvi.mx.df <- ee$FeatureCollection(ndvi.mx.lst)$flatten()
+ndvi.df <- ee$FeatureCollection(ndvi.lst)$flatten()
 
 # Export 
-ndvi.mean.exp <- ee$batch$Export$table(ndvi.mean.df, 'fires-mean-250-NDVI', list(driveFolder =  'fire_variables')) 
-ndvi.min.exp <- ee$batch$Export$table(ndvi.min.df, 'fires-min-250-NDVI', list(driveFolder =  'fire_variables')) 
-ndvi.mx.exp <- ee$batch$Export$table(ndvi.mx.df, 'fires-max-250-NDVI', list(driveFolder =  'fire_variables')) 
+ndvi.exp <- ee$batch$Export$table(ndvi.df, '250-NDVI', list(driveFolder =  'fire_variables')) 
 ## Default format is csv
-
-ndvi.mean.exp$start()
-ndvi.min.exp$start()
-ndvi.mx.exp$start()
+ndvi.exp$start()
 
 #### CLIMATE ##########################
 
@@ -231,70 +211,42 @@ fires.sp <- ee$FeatureCollection(ee$List(c(early,late)))$flatten()
 soil.month <- unique(fires.sp$aggregate_array('ym')$getInfo())
 
 # Create empty lists
-soil.mean <- list()
-soil.min <- list()
-soil.mx <- list()
+soil.lst <- list()
 
 # Extract soil moisture content
 for (i in 1:length(soil.month)) {
-  # Mean soil moisture content
-  soil.mean[[i]] <- 
+  soil.lst[[i]] <- 
     soil$filter(ee$Filter$eq('system:index', gsub("-", "", soil.month[i])))$toBands()$ 
     reduceRegions(
       collection = fires.sp$filter(ee$Filter$eq('ym', soil.month[i]))$select('z'),
-      reducer = ee$Reducer$mean()) 
-  # Repeat for minimum soil moisture content
-  soil.min[[i]] <- 
-    soil$filter(ee$Filter$eq('system:index', gsub("-", "", soil.month[i])))$toBands()$ 
-    reduceRegions(
-      collection = fires.sp$filter(ee$Filter$eq('ym', soil.month[i]))$select('z'),
-      reducer = ee$Reducer$min(),
-      scale = 250) 
-  # Repeat for maximum soil moisture content
-  soil.mx[[i]] <- 
-    soil$filter(ee$Filter$eq('system:index', gsub("-", "", soil.month[i])))$toBands()$ 
-    reduceRegions(
-      collection = fires.sp$filter(ee$Filter$eq('ym', soil.month[i]))$select('z'),
-      reducer = ee$Reducer$max(),
+      reducer = ee$Reducer$mean()$combine(
+        ee$Reducer$max(), sharedInputs = TRUE)$combine(
+          ee$Reducer$min(), sharedInputs = TRUE),
       scale = 250)
 } 
 
 # Merge list of feature collections
-soil.mean.df <- ee$FeatureCollection(soil.mean)$flatten()
-soil.min.df <- ee$FeatureCollection(soil.min)$flatten()
-soil.mx.df <- ee$FeatureCollection(soil.mx)$flatten()
+soil.df <- ee$FeatureCollection(soil.lst)$flatten()
 
 # Export 
-soil.mean.exp <- ee$batch$Export$table(soil.mean.df, 'mean-soil-moisture', list(driveFolder = 'patches')) 
-soil.min.exp <- ee$batch$Export$table(soil.min.df, 'min-soil-moisture', list(driveFolder = 'patches')) 
-soil.mx.exp <- ee$batch$Export$table(soil.mx.df, 'max-soil-moisture', list(driveFolder = 'patches')) 
-
-soil.mean.exp$start()
-soil.min.exp$start()
-soil.mx.exp$start()
+soil.exp <- ee$batch$Export$table(soil.df, 'soil-moisture', list(driveFolder = 'patches')) 
+soil.exp$start()
 
 #### GLOBAL FRICTION SURFACE ##########################
 
 fric <- ee$Image('Oxford/MAP/friction_surface_2019')$
   select('friction')
 
-# Mean travel time across fire patch
-fric.mean <- fric$reduceRegions(
+# Mean and minimum travel time across fire patch
+fric.df <- fric$reduceRegions(
   collection = fires.sp$select('z'),
-  reducer = ee$Reducer$mean(),
-  scale = 250)
-# Minimum travel time from fire patch
-fric.min <- fric$reduceRegions(
-  collection = fires.sp$select('z'),
-  reducer = ee$Reducer$min(),
+   reducer = ee$Reducer$mean()$combine(
+    ee$Reducer$min(), sharedInputs = TRUE),
   scale = 250)
 
 # Export 
-fric.mean.exp <- ee$batch$Export$table(fric.mean, 'mean-friction', list(driveFolder = 'patches')) 
-fric.min.exp <- ee$batch$Export$table(fric.min, 'min-friction', list(driveFolder = 'patches')) 
-
-fric.mean.exp$start()
-fric.min.exp$start()
+fric.exp <- ee$batch$Export$table(fric.df, 'friction', list(driveFolder = 'patches')) 
+fric.exp$start()
 
 #### POPULATION DENSITY ##########################
 
