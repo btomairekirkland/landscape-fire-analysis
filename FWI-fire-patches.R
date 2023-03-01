@@ -54,27 +54,32 @@ for (i in 1:length(dates)) {
   for (t in 1:length.vec[i]) {
     filenames[[i]][t] <-  list.files(path=getwd(),pattern=dates[[i]][t], full.names=TRUE, recursive=TRUE) 
     s1 <- max(stack(filenames[[i]]))
+    crs(s1) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+    s1 <- projectRaster(s1, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
     drought.mx[[i]] <- as.data.frame(extract(s1, shp[i,], fun = max)) 
   }  
 } 
 
 # And lagged DC (3, 6 and 12 months before)
 for (i in 1:length(unique(shp$month3))) {
-  drought.3.mx[[i]] <- as.data.frame(extract(
-    raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE)), # Find raster file 
-              shp[shp$month3 == unique(shp$month3)[i],], # Extract drought code within each fire patch area
-                                             fun = max)) # Maximum drought code
+  s2 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  crs(s2) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+  s2 <- projectRaster(s1, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+  drought.3.mx[[i]] <- as.data.frame(extract(s2, shp[shp$month3 == unique(shp$month3)[i],], # Extract drought code within each fire patch area
+      fun = max)) # Maximum drought code
 }
 # Repeat for 6 and 12 months before fire
 for (i in 1:length(unique(shp$month6))) {
-  drought.6.mx[[i]] <- as.data.frame(extract(
-    raster(list.files(path=getwd(), pattern=unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE)), 
-              shp[shp$month6 == unique(shp$month6)[i],], fun = max))
+  s3 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  crs(s3) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+  s3 <- projectRaster(s1, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+  drought.6.mx[[i]] <- as.data.frame(extract(s3, shp[shp$month6 == unique(shp$month6)[i],], fun = max))
 }
 for (i in 1:length(unique(shp$month12))) {
-  drought.12.mx[[i]] <- as.data.frame(extract(
-    raster(list.files(path=getwd(), pattern=unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE)), 
-              shp[shp$month12 == unique(shp$month12)[i],], fun = max))
+  s4 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  crs(s4) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+  s4 <- projectRaster(s4, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+  drought.12.mx[[i]] <- as.data.frame(extract(s4, shp[shp$month12 == unique(shp$month12)[i],], fun = max))
 }
 
 # Merge dataframes in list    
@@ -106,27 +111,33 @@ filenames <- vector("list", length(dates))
 # Loop through each date reading in all rasters and calculating the maximum KBDI
 for (i in 1:length(dates)) {
   for (t in 1:length.vec[i]) {
-    filenames[[i]][t] <-  list.files(path=getwd(), pattern=dates[[i]][t], full.names=TRUE, recursive=TRUE) 
-    s2 <- max(stack(filenames[[i]]))
-    kbdi.mx[[i]] <- as.data.frame(extract(s2, shp[i,], fun = max)) 
+    filenames[[i]][t] <-  list.files(path=getwd(),pattern=dates[[i]][t], full.names=TRUE, recursive=TRUE) 
+    s5 <- max(stack(filenames[[i]]))
+    crs(s5) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+    s5 <- projectRaster(s5, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+    s5 <- max(stack(filenames[[i]]))
+    kbdi.mx[[i]] <- as.data.frame(extract(s5, shp[i,], fun = max)) 
   }  
 }
 
 # And lagged DC (3, 6 and 12 months before)
 for (i in 1:length(unique(shp$month3))) {
-  kbdi.3.mx[[i]] <- as.data.frame(extract(
-    raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE)), 
-              shp[shp$month3 == unique(shp$month3)[i],], fun = max))
+  s6 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  crs(s6) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+  s6 <- projectRaster(s6, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+  kbdi.3.mx[[i]] <- as.data.frame(extract(s6, shp[shp$month3 == unique(shp$month3)[i],], fun = max))
 }
 for (i in 1:length(unique(shp$month6))) {
-  kbdi.6.mx[[i]] <- as.data.frame(extract(
-    raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE)), 
-              shp[shp$month6 == unique(shp$month6)[i],], fun = max))
+  s7 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  crs(s7) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+  s7 <- projectRaster(s7, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+  kbdi.6.mx[[i]] <- as.data.frame(extract(s7, shp[shp$month6 == unique(shp$month6)[i],], fun = max))
 }
 for (i in 1:length(unique(shp$month12))) {
-  kbdi.12.mx[[i]] <- as.data.frame(extract(
-    raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE)), 
-              shp[shp$month12 == unique(shp$month12)[i],], fun = mean))
+  s8 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  crs(s8) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+  s8 <- projectRaster(s8, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+  kbdi.12.mx[[i]] <- as.data.frame(extract(s8, shp[shp$month12 == unique(shp$month12)[i],], fun = mean))
 }
 
 # Merge dataframes in list    
@@ -154,8 +165,11 @@ filenames <- vector("list", length(dates))
 for (i in 1:length(dates)) {
   for (t in 1:length.vec[i]) {
     filenames[[i]][t] <-  list.files(path=getwd(),pattern=dates[[i]][t],full.names=TRUE,recursive=TRUE) 
-    s3 <- max(stack(filenames[[i]]))
-    ffmc.lst[[i]] <- as.data.frame(extract(s3, shp[i,], fun = max)) 
+    s9 <- max(stack(filenames[[i]]))
+    crs(s9) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+    s9 <- projectRaster(s9, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+    s9 <- max(stack(filenames[[i]]))
+    ffmc.lst[[i]] <- as.data.frame(extract(s9, shp[i,], fun = max)) 
   }  
 }
 
@@ -178,8 +192,11 @@ fwi.lst <- list()
 for (i in 1:length(dates)) {
   for (t in 1:length.vec[i]) {
     filenames[[i]][t] <-  list.files(path=getwd(),pattern=dates[[i]][t],full.names=TRUE,recursive=TRUE) 
-    s4 <- max(stack(filenames[[i]]))
-    fwi.lst[[i]] <- as.data.frame(extract(s4, shp[i,], fun = max)) 
+    s10 <- max(stack(filenames[[i]]))
+    crs(s10) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
+    s10 <- projectRaster(s10, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
+    s10 <- max(stack(filenames[[i]]))
+    fwi.lst[[i]] <- as.data.frame(extract(s10, shp[i,], fun = max)) 
   }  
 }
 
