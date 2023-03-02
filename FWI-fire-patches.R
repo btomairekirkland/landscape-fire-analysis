@@ -115,7 +115,6 @@ for (i in 1:length(dates)) {
     s5 <- max(stack(filenames[[i]]))
     crs(s5) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
     s5 <- projectRaster(s5, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
-    s5 <- max(stack(filenames[[i]]))
     kbdi.mx[[i]] <- as.data.frame(extract(s5, shp[i,], fun = max)) 
   }  
 }
@@ -168,7 +167,6 @@ for (i in 1:length(dates)) {
     s9 <- max(stack(filenames[[i]]))
     crs(s9) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
     s9 <- projectRaster(s9, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
-    s9 <- max(stack(filenames[[i]]))
     ffmc.lst[[i]] <- as.data.frame(extract(s9, shp[i,], fun = max)) 
   }  
 }
@@ -195,7 +193,6 @@ for (i in 1:length(dates)) {
     s10 <- max(stack(filenames[[i]]))
     crs(s10) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
     s10 <- projectRaster(s10, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
-    s10 <- max(stack(filenames[[i]]))
     fwi.lst[[i]] <- as.data.frame(extract(s10, shp[i,], fun = max)) 
   }  
 }
