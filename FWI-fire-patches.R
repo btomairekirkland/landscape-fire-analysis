@@ -120,7 +120,7 @@ for (i in 1:length(dates)) {
   }  
 }
 
-# And lagged DC (3, 6 and 12 months before)
+# And lagged KBDI (3, 6 and 12 months before)
 for (i in 1:length(unique(shp$month3))) {
   s6 <- raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE)) # Find raster file 
   crs(s6) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
