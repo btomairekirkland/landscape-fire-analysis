@@ -62,7 +62,7 @@ for (i in 1:length(dates)) {
 
 # And lagged DC (3, 6 and 12 months before)
 for (i in 1:length(unique(shp$month3))) {
-  s2 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  s2 <- raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE)) # Find raster file 
   crs(s2) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
   s2 <- projectRaster(s1, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
   drought.3.mx[[i]] <- as.data.frame(extract(s2, shp[shp$month3 == unique(shp$month3)[i],], # Extract drought code within each fire patch area
@@ -70,13 +70,13 @@ for (i in 1:length(unique(shp$month3))) {
 }
 # Repeat for 6 and 12 months before fire
 for (i in 1:length(unique(shp$month6))) {
-  s3 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  s3 <- raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE)) # Find raster file 
   crs(s3) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
   s3 <- projectRaster(s3, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
   drought.6.mx[[i]] <- as.data.frame(extract(s3, shp[shp$month6 == unique(shp$month6)[i],], fun = max))
 }
 for (i in 1:length(unique(shp$month12))) {
-  s4 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  s4 <- raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE)) # Find raster file 
   crs(s4) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
   s4 <- projectRaster(s4, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
   drought.12.mx[[i]] <- as.data.frame(extract(s4, shp[shp$month12 == unique(shp$month12)[i],], fun = max))
@@ -122,19 +122,19 @@ for (i in 1:length(dates)) {
 
 # And lagged DC (3, 6 and 12 months before)
 for (i in 1:length(unique(shp$month3))) {
-  s6 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  s6 <- raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month3))[i], full.names=TRUE, recursive=TRUE)) # Find raster file 
   crs(s6) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
   s6 <- projectRaster(s6, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
   kbdi.3.mx[[i]] <- as.data.frame(extract(s6, shp[shp$month3 == unique(shp$month3)[i],], fun = max))
 }
 for (i in 1:length(unique(shp$month6))) {
-  s7 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  s7 <- raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month6))[i], full.names=TRUE, recursive=TRUE)) # Find raster file 
   crs(s7) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
   s7 <- projectRaster(s7, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
   kbdi.6.mx[[i]] <- as.data.frame(extract(s7, shp[shp$month6 == unique(shp$month6)[i],], fun = max))
 }
 for (i in 1:length(unique(shp$month12))) {
-  s8 <- list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE) # Find raster file 
+  s8 <- raster(list.files(path=getwd(), pattern = unique(gsub("-", "", shp$month12))[i], full.names=TRUE, recursive=TRUE)) # Find raster file 
   crs(s8) <- "+proj=longlat +ellps=WGS84 +lon_wrap=180 +datum=WGS84 +no_defs" # Set coordinate reference system
   s8 <- projectRaster(s8, crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") # Reproject
   kbdi.12.mx[[i]] <- as.data.frame(extract(s8, shp[shp$month12 == unique(shp$month12)[i],], fun = mean))
