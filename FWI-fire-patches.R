@@ -204,11 +204,9 @@ fwi.df <- do.call("rbind", fwi.lst)
 colnames(fwi.df)[1] <- "fwi"
 
 #### Merge all dataframes ####
+shp <- subset(shp, select = "z") }
 dfs <- sapply(.GlobalEnv, is.data.frame) 
-df <- do.call(cbind, mget(names(dfs)[dfs]))
-# Rename ID column
-colnames(df)[4] <- c("z")
-df <- select(df, -contains("shp.")) # Remove dates, coordinates and geometry
+df <- do.call(cbind, unname(mget(names(dfs)[dfs])))
 # Export as csv file
 setwd("~/BTO projects/Polesia wildfires/input variables") # Change working directory to where you are storing your output files
 write.csv(df, "FWI.csv", row.names = F) ## Outputs are dataframe of fire weather indices and fire patch IDs
