@@ -207,6 +207,7 @@ colnames(fwi.df)[1] <- "fwi"
 shp <- subset(shp, select = "z") }
 dfs <- sapply(.GlobalEnv, is.data.frame) 
 df <- do.call(cbind, unname(mget(names(dfs)[dfs])))
+df <- subset(df, select = -geometry) # Remove geometry column
 # Export as csv file
 setwd("~/BTO projects/Polesia wildfires/input variables") # Change working directory to where you are storing your output files
 write.csv(df, "FWI.csv", row.names = F) ## Outputs are dataframe of fire weather indices and fire patch IDs
