@@ -14,7 +14,8 @@ setwd("~/BTO projects/Polesia wildfires/fire shapefiles/pixels")
 shp <- st_read("all_pixels.shp") ## Voxel dataset
 ## Can be done instead for ignition points
 ## setwd("~/BTO projects/Polesia wildfires/fire shapefiles/ignition points")
-## shp <- st_read("ignition_points.shp"
+## shp <- st_read("fire_patches.shp")
+## shp <- st_as_sf(shp, coords = c("I_LON", "I_LAT")) # Select ignition coordinates
 
 # Read in road shapefiles from Asia and Europe (continental shapefiles rather than global to speed up processing) and global road density raster
 roads.europe <- st_read("~/BTO projects/Polesia wildfires/input variables/GRIP4_Region4_vector_shp/GRIP4_region4.shp")
