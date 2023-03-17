@@ -13,7 +13,7 @@ library(dplyr)
 setwd("~/BTO projects/Polesia wildfires/fire shapefiles/pixels")
 shp <- st_read("all_pixels.shp") ## Voxel dataset
 ## Can be done instead for ignition points
-## setwd("~/BTO projects/Polesia wildfires/fire shapefiles/ignition points")
+## setwd("~/BTO projects/Polesia wildfires/fire shapefiles/fire shapefiles")
 ## shp <- st_read("fire_patches.shp")
 ## shp <- st_as_sf(shp, coords = c("I_LON", "I_LAT")) # Select ignition coordinates
 
