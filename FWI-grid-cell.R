@@ -140,7 +140,7 @@ colnames(fwi.df) <- "fwi"
 
 #### Merge all dataframes ####
 dfs <- sapply(.GlobalEnv, is.data.frame) 
-df <- do.call(cbind, mget(names(dfs)[dfs]))
+df <- do.call(cbind, unname(mget(names(dfs)[dfs])))
 # Rename columns
 colnames(df)[11:12] <- c("z", "pix")
 df <- select(df, -contains("pix.")) # Remove dates and geometry
