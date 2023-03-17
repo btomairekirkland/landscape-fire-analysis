@@ -36,10 +36,10 @@ for (i in 1:nrow(shp)) {
 }
 
 # Add distances to dataset and convert to km
-pix$dist_road <- df$distances/1000 
+shp$dist_road <- df$distances/1000 
 
 # Extract road density 
-pix$dens_road <- extract(dens, shp, fun = mean, weights = T)
+shp$dens_road <- extract(dens, shp, fun = mean, weights = T)
 
 # Drop geometry and export as csv
 df <- st_drop_geometry(shp)
