@@ -154,7 +154,7 @@ colnames(grid.fires)[2] <- "dates" # Rename start date of fire to match date col
 # Add ID to control points
 ctrl.pts$z <- paste0("CP", rownames(ctrl.pts))
 # Arrange columns in control point dataset
-cnt.pts <- cnt.pts[,c(5,3,2,1)]
+ctrl.pts <- ctrl.pts[,c(5,3,2,1)]
 # Convert date column to character
 ctrl.pts$dates <- as.character(ctrl.pts$dates)
 
@@ -176,7 +176,6 @@ fin.pix$pix <- paste0("PX", rownames(fin.pix))
 
 # Reorder columns and remove land cover column
 fin.pix <- fin.pix[,c(2,6,3,4,5)]
-
 
 # Export dated grid cell dataset
 setwd("~/BTO projects/Polesia wildfires/fire shapefiles/pixels")
